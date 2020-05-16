@@ -69,8 +69,8 @@ public class JwtUtil {
 		try {
 			jwtPayload = objectMapper.readValue(base64decoder.decode(tokenParts[1]), JwtPayload.class);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
 		return jwtPayload.getSub();
 	}

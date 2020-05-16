@@ -2,9 +2,11 @@ package com.navigraph.photobook.model;
 
 public class JwtPayload {
 
+	//issues at
 	private String iat;
+	//subject (username in our case)
     private String sub;
-    private Long userId;
+    //issuer
     private String iss;
     
     
@@ -20,12 +22,6 @@ public class JwtPayload {
 	}
 	public void setSub(String sub) {
 		this.sub = sub;
-	}
-	public Long getUserId() {
-		return userId;
-	}
-	public void setUserId(Long userId) {
-		this.userId = userId;
 	}
 	public String getIss() {
 		return iss;
