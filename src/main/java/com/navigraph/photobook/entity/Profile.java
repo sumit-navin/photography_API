@@ -25,6 +25,13 @@ public class Profile implements Serializable {
 	@Column(name = "type", length = 15, unique = true, nullable = false)
 	private String type = ProfileType.USER.getUserProfileType();
 
+	public Profile() {}
+	
+	public Profile(ProfileType type) {
+		super();
+		this.type = type.getUserProfileType();
+	}
+
 	public Long getId() {
 		return id;
 	}

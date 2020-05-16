@@ -34,7 +34,7 @@ public class User implements Serializable {
 	private Long id;
 
 	@NotEmpty
-	@Column(name = "username", unique = true, nullable = false)
+	@Column(name = "username", unique = true, length = 32, nullable = false)
 	private String username;
 
 	@NotEmpty
@@ -59,9 +59,26 @@ public class User implements Serializable {
 			@JoinColumn(name = "profile_id") })
 	private Set<Profile> userProfiles = new HashSet<Profile>();
 	
-	@NotEmpty
+
 	@Column(name = "is_active", nullable = false)
 	private boolean isActive;
+
+	
+	public User() {}
+	
+	
+	public User(@NotEmpty String username, @NotEmpty String password, @NotEmpty String firstName,
+			@NotEmpty String lastName, @NotEmpty String email, @NotEmpty Set<Profile> userProfiles,
+			boolean isActive) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.userProfiles = userProfiles;
+		this.isActive = isActive;
+	}
 
 	public Long getId() {
 		return id;
