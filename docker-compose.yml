@@ -1,0 +1,81 @@
+version: '3'
+services:
+  web:
+    container_name: navigraph_web_1
+    build: ./
+    ports:
+     - "8888:8888"
+     - "8088:8088"
+    volumes:
+      - www-sync:/var/html/www:nocopy
+      - tasks-sync:/var/html/tasks:nocopy
+      - server-sync:/opt/lucee/server/lucee-server/context/logs:nocopy
+      - web-sync:/opt/lucee/web/logs:nocopy
+      - fr-sync:/opt/fusionreactor/log:nocopy
+      - $HOME/.aws:/root/.aws
+      - ../ta-never-commit/tests/data/officeally/local:/var/html/www/public/tests/data/officeally/local
+    links:
+     - appdb
+     - fakesmtp
+    environment:
+      - LUCEE_PASSWORD
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_HOST
+      - MYSQL_DATABASE
+      - AWS_PROFILE
+      - AWS_REGION
+      - LUCEE_JAVA_OPTS
+      - SFTP_PASSWORD_MEGA
+      - SFTP_PASSWORD_CUSTONE
+      - SFTP_PASSWORD_CUSTTWO
+      - SFTP_PASSWORD_NCHXDEV
+      - S3_MODE
+      - S3_ENDPOINT=https://fakeaws:4572
+  appdb:
+    container_name: navigraph_appdb_1
+    image: mysql:5.7.22
+    ports:
+      - "3360:3306"
+    volumes:
+      - ../navi-never-commit/mysql:/var/lib/mysql
+      - ./configs/mysql/navi.cnf:/etc/mysql/conf.d/custom.cnf
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+  fakeaws:
+    container_name: navigraph_fakeaws_1
+    image: localstack/localstack
+    ports:
+      - 4572:4572
+      - 4575:4575
+      - 4593:4593
+    environment:
+      - SERVICES=s3:4572,sns:4575,iam:4593,sqs:4576
+      - DATA_DIR=/tmp/localstack/data
+      - HOSTNAME_EXTERNAL=localhost
+      - USE_SSL=true
+      - PORT_WEB_UI=8889
+      - DEBUG=sns
+    volumes:
+      - ../navi-never-commit/localstack/:/tmp/localstack/data
+  cache:
+    image: redis:4.0.9
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis:/data
+    entrypoint: redis-server --appendonly yes
+    restart: always
+
+volumes:
+  www-sync:
+    external: true
+  tasks-sync:
+    external: true
+  server-sync:
+    external: true
+  web-sync:
+    external: true
+  fr-sync:
+    external: true
+
